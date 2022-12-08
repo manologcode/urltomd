@@ -13,4 +13,4 @@ correr la imagen sobrescribiendo la carpeta app y accediendo al shell
 
 correr la imagen sobrescribiendo app con los nuevos cambios
 
-    docker run -it --rm -v $(pwd)/app:/home/myuser/app manologcode/urltomd python app.py    
+    docker run -it --rm -v $(pwd)/app:/home/myuser/app manologcode/urltomd python app.py
