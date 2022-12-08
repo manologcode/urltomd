@@ -1,0 +1,5 @@
+requests
+markdownify
+urllib3
+beautifulsoup4
+PyYAML
