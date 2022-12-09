@@ -10,11 +10,11 @@ ordenador o raspberry, simplemente se descarga la imagen ejecuta el proceso dent
 
 Para ejecutar el contenedor sin argumentos
 
-    docker run -it --rm -v $(pwd):/home/myuser/app/date_ext manologcode/urltomd    
+    docker run -it --rm -v $(pwd):/app/data_ext manologcode/urltomd    
 
 Para ejecutar el contenedor pasandoles un archivo yml de multiples urls
 
-    docker run -it --rm -v $(pwd):/home/myuser/app/date_ext manologcode/urltomd python app.py manolog_es.yml
+    docker run -it --rm -v $(pwd):/home/myuser/app/data_ext manologcode/urltomd python app.py manolog_es.yml
 
 
 He creado una archivo sh para ejecutar el contenedor y no escribir tantas sentencia docker **urltomd.sh**

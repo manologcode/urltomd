@@ -3,17 +3,23 @@ FROM python:3.11-alpine
 RUN apk --update add --no-cache
 RUN apk add curl
 
-#RUN pip install --upgrade pip --user
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 RUN adduser -D myuser
+# RUN chown myuser:myuser /app
+
 USER myuser
 
-RUN mkdir -p /home/myuser/app/data_ext
-WORKDIR /home/myuser/app
+RUN python -m venv /home/myuser/venv
+ENV PATH="/home/myuser/venv/bin:$PATH"
 
-COPY ./app /home/myuser/app
+RUN pip install --upgrade pip
+WORKDIR /app
+
+COPY ./app/* /app/
 ENV PATH="/home/myuser/.local/bin:$PATH" 
 
-RUN pip install --disable-pip-version-check --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 CMD [ "python", "./app.py"]
