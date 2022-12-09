@@ -8,7 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+            image: tonistiigi/binfmt:latest
+            platforms: all
         uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
@@ -21,6 +26,6 @@ jobs:
         run: |
           docker buildx build --push \
             --tag manologcode/urltomd:latest \
-            --platform linux/amd64 .
+            --platform linux/amd64,linux/arm64 .
 
 
