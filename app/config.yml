@@ -1,0 +1,8 @@
+folder_export: data_ext/
+
+find_urls:
+  data_yml:
+    tag: 'div'
+    selector: 
+      id: 'blog-post'
+    pages: []

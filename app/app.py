@@ -9,10 +9,9 @@ from find_urls import FindUrls
 from my_bs4 import MyBs4
 
 class UrlToMd():
-  config = configparser.ConfigParser()
-  config.read('config.ini')
+  config=InOutData.read_yaml('config.yml')
 
-  folder = config['common']['folder_export']
+  folder = config['folder_export']
 
   def __init__(self, tag=None, selector=None):
     self.tag = tag

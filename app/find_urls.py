@@ -1,25 +1,18 @@
 from in_out_data import InOutData
 from my_bs4 import MyBs4
-from configparser import ConfigParser
-import urllib3
 from urllib.parse import urlparse
+import urllib3
 urllib3.disable_warnings()
-
-
 class FindUrls():
-    config = ConfigParser()
-    config.read('config.ini')
 
-    folder = config['common']['folder_export']
-
-    data_yml = config['find_urls']['data_yml']
-
+    config=InOutData.read_yaml('config.yml')
     urls = {'url': True}
 
     def __init__(self, domain, exclude=None):
-
         self.exclude = exclude
         self.name_file = self.extract_name_to_url(domain)
+        if domain.endswith('/'):
+            domain = domain[:-1]
         self.domain = domain
         self.first_pass(domain)
         self.run_all_links()
@@ -65,7 +58,7 @@ class FindUrls():
         print(f"{len(self.urls)} enlaces capturados")
 
     def create_yaml_data(self):
-        data = self.data_yml
+        data = self.config['find_urls']['data_yml']
         last_key = list(data.keys())[-1]
         for link in self.urls:
             data[last_key].append(link)
@@ -76,4 +69,5 @@ if __name__ == "__main__":
 
     params = InOutData.read_file_params()
 
-    FindUrls(params['url'], "/tags,/categories")
+    FindUrls(params['url'])
+

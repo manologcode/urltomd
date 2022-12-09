@@ -1,16 +1,17 @@
 import yaml
 import sys
 import os
-import configparser
 
 from yaml.loader import SafeLoader
 
 class InOutData:
 
-    config = configparser.ConfigParser()
-    config.read('config.ini')
+    def read_yaml(file_name):
+        with open(file_name) as f:
+            data = yaml.load(f, Loader=SafeLoader)
+        return data
 
-    folder = config['common']['folder_export']
+    config=read_yaml('config.yml')
 
     @staticmethod
     def input_data(config):
@@ -47,18 +48,13 @@ class InOutData:
         ans = input("Que opción quieres? ") 
         return ans
 
-    @staticmethod
-    def read_yaml(file_name):
-        with open(file_name) as f:
-            data = yaml.load(f, Loader=SafeLoader)
-        return data
 
     
     @staticmethod
     def create_yaml_data( name, data):
         file_name = name + ".yml"
         print(f"Creando: {file_name}")
-        with open(InOutData.folder + file_name, 'w') as f:
+        with open( InOutData.config['folder_export'] + file_name, 'w') as f:
             data = yaml.dump(data, f, sort_keys=False)
     
     @staticmethod
@@ -67,8 +63,8 @@ class InOutData:
         print(sys.argv)
         if len(sys.argv) > 1:
             param = sys.argv[1]
-            path_file = InOutData.folder + param
+            path_file = InOutData.config['folder_export'] + param
             if os.path.isfile(path_file):
                 response['file'] = path_file
         response = response if response!={} else None
-        return response              
+        return response
