@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-import configparser
 from markdownify import markdownify
 import urllib.parse
 
@@ -9,14 +8,14 @@ from find_urls import FindUrls
 from my_bs4 import MyBs4
 
 class UrlToMd():
-  config=InOutData.read_yaml('config.yml')
+
+  config = InOutData.read_yaml('config.yml')
 
   folder = config['folder_export']
 
   def __init__(self, tag=None, selector=None):
     self.tag = tag
     self.selector = selector
-
 
   def create_file(self, name, data):
     f = open(f'{self.folder}{name}', 'a')
@@ -28,11 +27,12 @@ class UrlToMd():
         self.url_to_file(item)
 
   def url_to_file(self, url):
-    name_file = UrlToMd.extract_name_to_url(url) + '.md'
-    md_text=self.html_to_md(url)
-    if md_text is not None:
-      print(f'creando: {name_file}')
-      self.create_file(name_file, md_text)
+    if MyBs4.uri_exists(url): 
+      name_file = UrlToMd.extract_name_to_url(url) + '.md'
+      md_text=self.html_to_md(url)
+      if md_text is not None:
+        print(f'creando: {name_file}')
+        self.create_file(name_file, md_text)
 
   def html_to_md(self,url):
       html_text=MyBs4.read_content_url(url,self.tag, self.selector)
@@ -47,10 +47,7 @@ class UrlToMd():
     name = parts[-1] if parts[-1]!="" else parts[-2]
     return name
 
-
 if __name__ == '__main__':
-  config = configparser.ConfigParser()
-  config.read('config.ini')
   
   param = InOutData.read_params()
 

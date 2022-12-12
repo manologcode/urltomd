@@ -1,7 +1,9 @@
 urltomd(){
 	docker run --rm \
-	-v $(pwd):/home/myuser/app/date_ex \
+	-v $(pwd):/app/date_ext \
 	manologcode/urltomd \
-	manologcode/terminal_util \
 	python app.py "$@"
+}
+urltomd-rmi(){
+	docker rmi manologcode/urltomd
 }

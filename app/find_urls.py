@@ -8,11 +8,12 @@ class FindUrls():
     config=InOutData.read_yaml('config.yml')
     urls = {'url': True}
 
-    def __init__(self, domain, exclude=None):
+    def __init__(self, domain, exclude=None, custom_links=False):
+        self.custom_links = custom_links
         self.exclude = exclude
-        self.name_file = self.extract_name_to_url(domain)
         if domain.endswith('/'):
             domain = domain[:-1]
+        self.name_file = self.extract_name_to_url(domain)
         self.domain = domain
         self.first_pass(domain)
         self.run_all_links()
@@ -35,10 +36,13 @@ class FindUrls():
                 self.urls[link] = True
         size_links = len(self.urls)
         self.prepare_links(new_links)
-        if size_links < len(self.urls):
+        if size_links < len(self.urls) and size_links > 50:
             self.run_all_links()
         else:
-            self.create_yaml_data()
+            if self.custom_links:
+                self.create_yml_custom_links()
+            else:
+                self.create_yml_simple_links()
 
     def prepare_links(self, links):
         for link in links:
@@ -46,7 +50,9 @@ class FindUrls():
                 if not link.startswith(self.domain):
                     link = None
             else:
-                link = self.domain + link
+                if link.startswith('/'):
+                    link = link[1:]
+                link = self.domain + '/' + link
             # if link is not None and self.exclude is not None:
             #     for excl in self.exclude.split(','):
             #         if excl in link:
@@ -57,17 +63,24 @@ class FindUrls():
                     self.urls[f"{link}"] = False
         print(f"{len(self.urls)} enlaces capturados")
 
-    def create_yaml_data(self):
+    def create_yml_simple_links(self):
         data = self.config['find_urls']['data_yml']
         last_key = list(data.keys())[-1]
         for link in self.urls:
             data[last_key].append(link)
         InOutData.create_yaml_data(self.name_file, data)
 
+    def create_yml_custom_links(self):
+        data = self.config['find_urls']['data_yml']
+        last_key = list(data.keys())[-1]
+        for link in self.urls:
+            custom_link = {'url': link, 'actions': [{'photo': ''}]}
+            data[last_key].append(custom_link)
+        InOutData.create_yaml_data(self.name_file, data)
 
 if __name__ == "__main__":
 
     params = InOutData.read_file_params()
 
-    FindUrls(params['url'])
+    find_links=FindUrls(params['url'])
 

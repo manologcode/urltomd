@@ -7,8 +7,6 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN adduser -D myuser
-# RUN chown myuser:myuser /app
-
 USER myuser
 
 RUN python -m venv /home/myuser/venv

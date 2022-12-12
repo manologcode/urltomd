@@ -4,5 +4,5 @@ find_urls:
   data_yml:
     tag: 'div'
     selector: 
-      id: 'blog-post'
+      id: 'ident-ejem'
     pages: []
